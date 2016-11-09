@@ -6,9 +6,13 @@ output: pdf_document
 ---
 
 [Will try to find a way to simply download straight from the web to eliminate the need to read it in the old-fashioned way (which is preferable to him, of course).] 
-In terms of the structure of the assignment, we begin with a brief explanation of the data source.
 
-What we are trying to do, is see if traditional indicators of voter turnout have the same predictive power across generations. We would also like to see if new indicators, gender and race, hold more predictive power with Millennials than the "traditional" ones do. We feel the traditional indicators will not hold as strongly with the Millennial generation due to it's compisition and values. The ANES survey encompasses....  justify our exclusive use of the single ANES data source.... Variables used include... and are coded: 
+Our data source is the 2012 Times Series Study from American National Election Studies, a joint Stanford University and University of Michigan collaboration that is widely cited in academic literature. The study produced a panel survey of 62 MB. There were approximately 6,000 respondents who were contact via the internet and face to face. The database is comprehensive is scope, covering variables from employment status, gender, age, and race to opinions on major issues and social trust. While analyziing comparative survey data we found no added value in merging a set with ANES survey, if we did, our sample size would have been reduced and therefore the validity of our findings would not be as robust. 
+
+What we are trying to do, is see if traditional indicators of voter turnout have the same predictive power across generations. We would also like to see if new indicators, gender and race, hold more predictive power with Millennials than the "traditional" ones do. We feel the traditional indicators will not hold as strongly with the Millennial generation due to it's compisition and values. 
+
+Variables used include... 
+and are coded: 
 
 
 Given that our model will ultimately isolate the effects of our chosen turnout predictors on various age groups, we first need to break our giant panel data set into smaller data frames by age bands. This will entail having one age band exclusively for Millennials, who, at the time of the 2012 election, were 18-32 years of age, based on the definition used by the Pew Research Center and other organizations. The next age band will be Generation X, people born between 1965-1979, which places them between the ages of 33 and 47. Next comes the Baby Boomers, who were born between 1946 and 1964 and ran from ages 48 to 66 at the time of the 2012 election.The Silent Generation, born between 1925 and 1945, accounts for the age band of 67 to 87. Because there are so few observations in the data set who are older than 87, they will not be included.
@@ -32,6 +36,23 @@ anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) #crea
 #Creating a new variable for marital status
 
 marital_status <- subset(anes, anes$dem_marital)
+
+#Creating a new variable for highest level of education 
+
+dem_edugroup_x
+
+#Creating a new variable for employment status 
+
+dem_empstatus_2digitfin_x
+dem_empstatus_1digitfin_x
+
+#Creating a new variable for race 
+
+dem_raceeth_x
+
+#Creating a new variable for mobility 
+
+dem3_add5yr_samestate
 
 ```
 

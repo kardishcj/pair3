@@ -33,26 +33,19 @@ anes_genX <-  subset(anes, anes$dem_age_r_x > 32 & anes$dem_age_r_x < 48) #creat
 anes_boomer <- subset(anes, anes$dem_age_r_x > 47 & anes$dem_age_r_x < 67) #creates Baby Boomer subset
 anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) #creates Silent Generation subset
 
-#Creating a new variable for marital status
 
-marital_status <- subset(anes, anes$dem_marital)
+#Creating new variables from the ANES data 
 
-#Creating a new variable for highest level of education 
+marital_status <- subset(anes, anes$dem_marital)   #Creating a new variable for marital status
 
-dem_edugroup_x
+dem_edugroup_x   #Creating a new variable for highest level of education 
 
-#Creating a new variable for employment status 
-
-dem_empstatus_2digitfin_x
+dem_empstatus_2digitfin_x   #Creating a new variable for employment status 
 dem_empstatus_1digitfin_x
 
-#Creating a new variable for race 
+dem_raceeth_x   #Creating a new variable for race 
 
-dem_raceeth_x
-
-#Creating a new variable for mobility 
-
-dem3_add5yr_samestate
+dem3_add5yr_samestate   #Creating a new variable for mobility 
 
 ```
 

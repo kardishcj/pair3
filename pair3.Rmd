@@ -38,7 +38,9 @@ anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) #crea
 
 #*Creating new variables from the ANES data*
 
-marital_status <- subset(anes, anes$dem_marital)   #Creating a new variable for marital status
+marital_status <- (anes$dem_marital)   #Creating a new variable for marital status
+
+
 
 dem_edugroup_x   #Creating a new variable for highest level of education 
 

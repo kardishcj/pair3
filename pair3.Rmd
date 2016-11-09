@@ -11,8 +11,7 @@ Our data source is the 2012 Times Series Study from American National Election S
 
 What we are trying to do, is see if traditional indicators of voter turnout have the same predictive power across generations. We would also like to see if new indicators, gender and race, hold more predictive power with Millennials than the "traditional" ones do. We feel the traditional indicators will not hold as strongly with the Millennial generation due to it's compisition and values. 
 
-Variables used include... 
-and are coded: 
+Variables used include highest level of education, generation, marital status, gender, race, and employment status. Additionally, we plan on looking at ___ and ___. They above are coded as: 
 
 
 Given that our model will ultimately isolate the effects of our chosen turnout predictors on various age groups, we first need to break our giant panel data set into smaller data frames by age bands. This will entail having one age band exclusively for Millennials, who, at the time of the 2012 election, were 18-32 years of age, based on the definition used by the Pew Research Center and other organizations. The next age band will be Generation X, people born between 1965-1979, which places them between the ages of 33 and 47. Next comes the Baby Boomers, who were born between 1946 and 1964 and ran from ages 48 to 66 at the time of the 2012 election.The Silent Generation, born between 1925 and 1945, accounts for the age band of 67 to 87. Because there are so few observations in the data set who are older than 87, they will not be included.
@@ -33,6 +32,8 @@ anes_genX <-  subset(anes, anes$dem_age_r_x > 32 & anes$dem_age_r_x < 48) #creat
 anes_boomer <- subset(anes, anes$dem_age_r_x > 47 & anes$dem_age_r_x < 67) #creates Baby Boomer subset
 anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) #creates Silent Generation subset
 
+#Looking at descriptive stats on the different generations
+
 
 
 #*Creating new variables from the ANES data*
@@ -47,6 +48,10 @@ dem_empstatus_1digitfin_x
 dem_raceeth_x   #Creating a new variable for race 
 
 dem3_add5yr_samestate   #Creating a new variable for mobility 
+
+
+
+
 
 ```
 

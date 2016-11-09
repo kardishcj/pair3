@@ -34,7 +34,8 @@ anes_boomer <- subset(anes, anes$dem_age_r_x > 47 & anes$dem_age_r_x < 67) #crea
 anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) #creates Silent Generation subset
 
 
-#Creating new variables from the ANES data 
+
+#*Creating new variables from the ANES data*
 
 marital_status <- subset(anes, anes$dem_marital)   #Creating a new variable for marital status
 

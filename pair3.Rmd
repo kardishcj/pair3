@@ -146,5 +146,5 @@ ggplot(employ_boomer, aes(x = employ_boomer[,1], y = employ_boomer[,2])) + geom_
 
 ```
 
-
+Potentially gender, then interaction, gender and employment by generation or correlations. 
 

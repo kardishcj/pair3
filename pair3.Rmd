@@ -91,13 +91,13 @@ levels(anes$dem_raceeth_x)
 levels(anes_genY$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
 race_genY <- table(anes_genY$dem_raceeth_x)  %>% as.data.frame()
 colnames(race_genY) <- c("Race", "Number of people")
-ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Race") + labs(x="Race",y="Number of people")
+ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Millenial Race Breakdown") + labs(x="Race",y="Number of people")
 
 
 ```
 
 
-Now, we'll take a look at the babyboomers breakdown by race. 
+Now, we'll take a look at the babyboomers by race. 
 
 ```{r} 
 #Looking at the breakdown of race for Babyboomers
@@ -108,6 +108,43 @@ levels(anes$dem_raceeth_x)
 levels(anes_boomer$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
 race_boomer <- table(anes_boomer$dem_raceeth_x)  %>% as.data.frame()
 colnames(race_boomer) <- c("Race", "Number of people")
-ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race") + labs(x="Race",y="Number of people")
+ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race Breakdown") + labs(x="Race",y="Number of people")
+
+```
+
+Now we'll look at employment status by generation, first the millenials: 
+
+```{r} 
+
+levels(anes$dem_empstatus_1digitfin_x)
+
+#sticking with the original coding, other does count as an additional race
+levels(anes_genY$dem_empstatus_1digitfin_x) <- c("Refused", "Don't Know", "Working", "Laid off", "Unemployed", "Retired", "Disabled", "Homemaker", "Student") 
+
+#I'd like to eliminate all of them except working, laid off, unemployed, homemaker, student 
+
+employ_genY <- table(anes_genY$dem_empstatus_1digitfin_x)  %>% as.data.frame()
+colnames(employ_genY) <- c("Employment", "Number of people")
+ggplot(employ_genY, aes(x = employ_genY[,1], y = employ_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Millennials Employment Status") + labs(x="Employment Status",y="Number of people")
+
+```
+
+Next, the babyboomers
+
+```{r} 
+
+levels(anes$dem_empstatus_1digitfin_x)
+
+#sticking with the original coding, other does count as an additional race
+levels(anes_boomer$dem_empstatus_1digitfin_x) <- c("Refused", "Don't Know", "Working", "Laid off", "Unemployed", "Retired", "Disabled", "Homemaker", "Student") 
+
+#I'd like to eliminate all of them except working, laid off, unemployed, homemaker, student 
+
+employ_boomer <- table(anes_boomer$dem_empstatus_1digitfin_x)  %>% as.data.frame()
+colnames(employ_boomer) <- c("Employment", "Number of people")
+ggplot(employ_boomer, aes(x = employ_boomer[,1], y = employ_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Employment Status") + labs(x="Employment Status",y="Number of people")
+
+```
+
 
 

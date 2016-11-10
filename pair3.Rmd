@@ -82,7 +82,7 @@ ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "
 Now we'll take a quick look at race by generation, again we'll begin with Millennials. 
 
 ```{r}
-#Looking at the breakdown of race for GenerationY
+#Looking at the breakdown of race for GenerationY (Millennials)
 
 library(ggplot2)
 levels(anes$dem_raceeth_x)
@@ -92,7 +92,6 @@ levels(anes_genY$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, H
 race_genY <- table(anes_genY$dem_raceeth_x)  %>% as.data.frame()
 colnames(race_genY) <- c("Race", "Number of people")
 ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Millenial Race Breakdown") + labs(x="Race",y="Number of people")
-
 
 ```
 
@@ -111,6 +110,10 @@ colnames(race_boomer) <- c("Race", "Number of people")
 ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race Breakdown") + labs(x="Race",y="Number of people")
 
 ```
+
+When comparing the Millennials to the babyboomers, we see that a larger percentage of the Millenials self-idenity as a minoirty race.
+
+
 
 Now we'll look at employment status by generation, first the millenials: 
 
@@ -171,4 +174,7 @@ Gender_boomer <- table(anes_boomer$gender_respondent_x)  %>% as.data.frame()
 colnames(Gender_boomer) <- c("Gender", "Number of people")
 
 ```
+
+
+
 

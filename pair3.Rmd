@@ -146,5 +146,29 @@ ggplot(employ_boomer, aes(x = employ_boomer[,1], y = employ_boomer[,2])) + geom_
 
 ```
 
-Potentially gender, then interaction, gender and employment by generation or correlations. 
+Gender for Millenials
+
+```{r} 
+
+levels(anes$gender_respondent_x)
+
+levels(anes_genY$gender_respondent_x) <- c("Male", "Female") 
+
+Gender_genY <- table(anes_genY$gender_respondent_x)  %>% as.data.frame()
+colnames(Gender_genY) <- c("Gender", "Number of people")
+
+```
+
+Gender for babyboomers
+
+```{r} 
+
+levels(anes$gender_respondent_x)
+
+levels(anes_boomer$gender_respondent_x) <- c("Male", "Female") 
+
+Gender_boomer <- table(anes_boomer$gender_respondent_x)  %>% as.data.frame()
+colnames(Gender_boomer) <- c("Gender", "Number of people")
+
+```
 

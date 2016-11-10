@@ -23,6 +23,7 @@ But first, let's see what the age variable actually looks like.
 #setwd('C:/Users/Chris/Documents/GitHub/pair3')
 library(foreign)
 library(dplyr)
+library(stargazer)
 
 anes <- read.dta("anes_timeseries_2012_Stata12.dta")
 age <- anes$dem_age_r_x %>% as.data.frame()
@@ -95,7 +96,6 @@ ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "
 
 ```
 
-
 Now, we'll take a look at the babyboomers by race. 
 
 ```{r} 
@@ -111,11 +111,24 @@ ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(st
 
 ```
 
-When comparing the Millennials to the babyboomers, we see that a larger percentage of the Millenials self-idenity as a minoirty race.
+When comparing the Millennials to the babyboomers, we see that while whites are still the majority, there is much stronger minority representation in the Millennial generation. 
 
+```{r} 
+#I TRIED TO CREATE A PRETTY STARGAZER TABLE HERE BUT I CAN'T MAKE IT WORK. I'D LIKE TO 
+#GIVE ONE CLEAR TABLE COMPARING FREQUENCY OF MINORITY RACES PER GENERATION 
+
+Race_df <- anes$dem_raceeth_x %>% as.data.frame()
+stargazer(Race_df)
+
+stargazer(Race_df, summary = FALSE, rownames = FALSE)
+
+a percentage breakdown would be ideal. 
 
 
 Now we'll look at employment status by generation, first the millenials: 
+
+```
+
 
 ```{r} 
 
@@ -132,7 +145,7 @@ ggplot(employ_genY, aes(x = employ_genY[,1], y = employ_genY[,2])) + geom_bar(st
 
 ```
 
-Next, the babyboomers
+Next, the babyboomers:
 
 ```{r} 
 
@@ -148,6 +161,12 @@ colnames(employ_boomer) <- c("Employment", "Number of people")
 ggplot(employ_boomer, aes(x = employ_boomer[,1], y = employ_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Employment Status") + labs(x="Employment Status",y="Number of people")
 
 ```
+
+
+
+
+
+
 
 Gender for Millenials
 

@@ -79,14 +79,23 @@ ggplot(ed_boomer, aes(x = ed[,1], y = ed[,2])) + geom_bar(stat = "identity") + g
 
 [Will then write something describing the plot here]
 
-
-
-
-[Variables you gatherered that you may still want to use]
+Now we'll take a quick look at race by generation, again we'll begin with Millennials. 
 
 ```{r}
+#Looking at the breakdown of race for GenerationY
 
-dem_edugroup_x
+library(ggplot2)
+levels(anes$dem_raceeth_x)
+#changing the wording because it looks awful and will look even worst on 
+#a table; doing this by changing the factor levels 
+levels(anes_genY$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
+race_genY <- table(anes_genY$dem_raceeth_x)  %>% as.data.frame()
+colnames(race_genY) <- c("Race", "Number of people")
+ggplot(race_genY, aes(x = ed[,1], y = ed[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Race") + labs(x="Race",y="Number of people")
+
+
+
+
 marital_status 
 
 dem_edugroup_x   #Creating a new variable for highest level of education 
@@ -94,12 +103,20 @@ dem_edugroup_x   #Creating a new variable for highest level of education
 dem_empstatus_2digitfin_x   #Creating a new variable for employment status 
 dem_empstatus_1digitfin_x
 
-dem_raceeth_x   #Creating a new variable for race 
-
 dem3_add5yr_samestate   #Creating a new variable for mobility 
 
 ```
 
+```{r} 
 
+#Looking at the breakdown of race for Babyboomers
+
+levels(anes$dem_raceeth_x)
+
+#sticking with the original coding, other does count as an additional race
+levels(anes_boomer$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
+race_boomer <- table(anes_boomer$dem_raceeth_x)  %>% as.data.frame()
+colnames(race_boomer) <- c("Race", "Number of people")
+ggplot(race_boomer, aes(x = ed[,1], y = ed[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race") + labs(x="Race",y="Number of people")
 
 

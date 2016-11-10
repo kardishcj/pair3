@@ -60,7 +60,7 @@ levels(anes$dem_edugroup_x)
 levels(anes_genY$dem_edugroup_x) <- c("Refused", "Don't know", "Data missing", "Below high school", "High school", "Some post-high", "Bachelor", "Graduate") 
 ed_genY <- table(anes_genY$dem_edugroup_x)  %>% as.data.frame()
 colnames(ed_genY) <- c("Education", "Number of people")
-ggplot(ed_genY, aes(x = ed[,1], y = ed[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Education") + labs(x="Education",y="Number of people")
+ggplot(ed_genY, aes(x = ed_genY[,1], y = ed_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Education") + labs(x="Education",y="Number of people")
 
 ```
 
@@ -73,7 +73,7 @@ Compare that with the Baby Boomers
 levels(anes_boomer$dem_edugroup_x) <- c("Refused", "Don't know", "Data missing", "Below high school", "High school", "Some post-high", "Bachelor", "Graduate") 
 ed_boomer <- table(anes_boomer$dem_edugroup_x)  %>% as.data.frame()
 colnames(ed_boomer) <- c("Education", "Number of people")
-ggplot(ed_boomer, aes(x = ed[,1], y = ed[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Education") + labs(x="Education",y="Number of people")
+ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Education") + labs(x="Education",y="Number of people")
 
 ```
 
@@ -91,24 +91,15 @@ levels(anes$dem_raceeth_x)
 levels(anes_genY$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
 race_genY <- table(anes_genY$dem_raceeth_x)  %>% as.data.frame()
 colnames(race_genY) <- c("Race", "Number of people")
-ggplot(race_genY, aes(x = ed[,1], y = ed[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Race") + labs(x="Race",y="Number of people")
+ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Race") + labs(x="Race",y="Number of people")
 
-
-
-
-marital_status 
-
-dem_edugroup_x   #Creating a new variable for highest level of education 
-
-dem_empstatus_2digitfin_x   #Creating a new variable for employment status 
-dem_empstatus_1digitfin_x
-
-dem3_add5yr_samestate   #Creating a new variable for mobility 
 
 ```
 
-```{r} 
 
+Now, we'll take a look at the babyboomers breakdown by race. 
+
+```{r} 
 #Looking at the breakdown of race for Babyboomers
 
 levels(anes$dem_raceeth_x)
@@ -117,6 +108,6 @@ levels(anes$dem_raceeth_x)
 levels(anes_boomer$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
 race_boomer <- table(anes_boomer$dem_raceeth_x)  %>% as.data.frame()
 colnames(race_boomer) <- c("Race", "Number of people")
-ggplot(race_boomer, aes(x = ed[,1], y = ed[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race") + labs(x="Race",y="Number of people")
+ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race") + labs(x="Race",y="Number of people")
 
 

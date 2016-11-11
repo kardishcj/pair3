@@ -246,7 +246,7 @@ colnames(pid_boomer) <- c("Party ID strength", "Number of people")
 ggplot(pid_boomer, aes(x = pid_boomer[,1], y = pid_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Party ID Strength") + labs(x="Strength of Party ID", y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1)) 
 ```
 
-<br>
+
 
 Surprisingly, considering literature routinely touts the unaffiliated status of Millennials, it is the Baby Boomers in this sample who identify less strongly with party in the extreme end of the spectrum. 
 

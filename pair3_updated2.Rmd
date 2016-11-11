@@ -7,19 +7,23 @@ output: pdf_document
 
 To reiterate briely, we posit that predictors of individual voter turnout that commonly appear in academic literature will have different impacts on Millennial voters than older generations owing to signicant differences in attitude, composition, and other areas. Some -- such as education and party identication -- will have less of an impact as measured in a logit regression, while others -- such as gender, race, candidate attachment, employment status -- will have greater predictive power. To assess these differences, the same set of variables will be applied to different generational age bands using a logistical regression model.
 
-Our data source is the 2012 Times Series Study from American National Election Studies, a joint Stanford University and University of Michigan collaboration that is widely cited in academic literature. The study surveyed the same respondents both before and after the 2012 U.S. presidential election. There were approximately 6,000 respondents who were contacted via the internet and face to face. The database is comprehensive inscope, covering myriad demographic variables along with attitudes, opinions, and dispositions. While there is a 2013 follow-up with the same panel, the variables are not of interest and merging would require losing more than 3,000 respondents, making the validity of our ﬁndings less robust. 
+Our data source is the 2012 Times Series Study from American National Election Studies, a joint Stanford University and University of Michigan collaboration that is widely cited in academic literature. The study surveyed the same respondents both before and after the 2012 U.S. presidential election. There were approximately 6,000 respondents who were contacted via the internet and face to face. The database is comprehensive inscope, covering myriad demographic variables along with attitudes, opinions, and dispositions. While there is a 2013 follow-up with the same panel, the variables are not of interest and merging would require losing more than 3,000 respondents, making the validity of our finndings less robust. 
 
-Variables used include age, highest level of education, race, employment status, gender, past voting decisions, strength of party identiﬁcation, sense of civic duty, and strength of candidate attachment. In the interest of word count and sheer length we will not include descriptive statistics for each variable in this document, but for those without tables, graphs, or other ﬁgures, we will provide greater detail about how they are coded and what exactly they measure. 
+Variables used include age, highest level of education, race, employment status, gender, past voting decisions, strength of party identification, sense of civic duty, and strength of candidate attachment. In the interest of word count and sheer length we will not include descriptive statistics for each variable in this document, but for those without tables, graphs, or other figures, we will provide greater detail about how they are coded and what exactly they measure. 
 
-Because ANES requires login information and its ZIP folders contain many ﬁles, it is not possible to access the data using only a URL and tempﬁle function. 
+Because ANES requires login information and its ZIP folders contain many variables, it is not possible to access the data using only a URL and tempfile function. 
 
-While the data set is quite clean, we begin with some minor things, such as recoding for readability of results and to better align with how we’ll use each variable. Also, we can ultimately pare down this enormous data set to only variables of use, as demonstrated below. 
+While the data set is quite clean, we begin with some minor things, such as recoding for readability of results and to better align with how we'll use each variable. Also, we can ultimately pare down this enormous data set to only variables of use, as demonstrated below. 
 
 ```{r}
 
-library(foreign) anes <- read.dta("anes_timeseries_2012_Stata12.dta")
-#table(anes$dem_age_r_x) #age
+#rm(list = ls()) this command clears your environment
+#setwd('C:/Users/Chris/Documents/GitHub/pair3')
 
+library(foreign) 
+anes <- read.dta("anes_timeseries_2012_Stata12.dta")
+
+#table(anes$dem_age_r_x) #age
 anes <- anes[!(anes$dem_age_r_x <= -2 | anes$dem_age_r_x >= 88),] 
 #deletes outliers
 
@@ -44,7 +48,8 @@ levels(anes$pid_strong) <- c("Refused", "Don't know", "Error", "Inapplicable", "
 anes$pid_dummy <- anes$pid_strong == "Strong" #creates dummy
 
 #table(anes$preswin_dutyst) #voting as civic duty
-levels(anes$pid_strong) <- c("Refused", "Don't know", "Inapplicable", "Very strongly", "Moderately strongly", "A little strongly") anes$duty <- anes$preswin_dutyst == "Very strongly"
+levels(anes$pid_strong) <- c("Refused", "Don't know", "Inapplicable", "Very strongly", "Moderately strongly", "A little strongly") 
+anes$duty <- anes$preswin_dutyst == "Very strongly"
 
 #table(anes$postvote_prefprstr) #strong preference for candidate
 anes$strong_pref <- anes$postvote_prefprstr == "Strong"
@@ -93,18 +98,21 @@ Now that we have the ability to separate our data by age, let's look at some key
 
 ```{r, echo=FALSE}
 
-library(ggplot2) ed_genY <- table(anes_genY$dem_edugroup_x) %>% as.data.frame() colnames(ed_genY) <- c("Education", "Number of people") 
+library(ggplot2) 
+ed_genY <- table(anes_genY$dem_edugroup_x) %>% as.data.frame() 
+colnames(ed_genY) <- c("Education", "Number of people") 
 ggplot(ed_genY, aes(x = ed_genY[,1], y = ed_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Education") + labs(x="Education",y="Number of people")
 
 ```
 
 The largest share of Millennial respondents, nearly 500, list some post-high-school education.The secondhighest category is high school education alone.
 
-Let'ss see how the data look for Baby Boomers.
+Let's see how the data look for Baby Boomers.
 
 ```{r, echo=FALSE}
 
-ed_boomer <- table(anes_boomer$dem_edugroup_x) %>% as.data.frame() colnames(ed_boomer) <- c("Education", "Number of people") 
+ed_boomer <- table(anes_boomer$dem_edugroup_x) %>% as.data.frame() 
+colnames(ed_boomer) <- c("Education", "Number of people") 
 ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Education") + labs(x="Education",y="Number of people")
 
 ```
@@ -113,8 +121,10 @@ The data actually have a somewhat similar shape and distribution, just slightly 
 
 ```{r, echo=FALSE}
 
-levels(anes_genY$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") race_genY <- table(anes_genY$dem_raceeth_x) %>% as.data.frame() colnames(race_genY) <- c("Race", "Number of people") 
-ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") +  ggtitle("Millenial Race Breakdown") + labs(x="Race",y="Number of people")
+levels(anes_genY$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
+race_genY <- table(anes_genY$dem_raceeth_x) %>% as.data.frame()
+colnames(race_genY) <- c("Race", "Number of people") 
+ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") +  ggtitle("Millenial Race Breakdown") + labs(x="Race",y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
 
 ```
 
@@ -122,8 +132,10 @@ Now, we'll take a look at the Baby Boomers by race.
 
 ```{r, echo=FALSE}
 
-race_boomer <- table(anes_boomer$dem_raceeth_x) %>% as.data.frame() colnames(race_boomer) <- c("Race", "Number of People") 
-ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race Breakdown") + labs(x="Race",y="Number of people")
+levels(anes_boomer$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
+race_boomer <- table(anes_boomer$dem_raceeth_x) %>% as.data.frame()
+colnames(race_boomer) <- c("Race", "Number of People") 
+ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") +  ggtitle("Boomer Race Breakdown") + labs(x="Race",y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
 
 ```
 
@@ -131,7 +143,16 @@ The difference visually is stark. The relatively lower proportions of black and 
 
 ```{r, echo=FALSE, results='asis'}
 
-race_genY$Percentage <- prop.table(table(anes_genY$dem_raceeth_x)) race_genY$Percentage <- round((race_genY$Percentage * 100), digits = 0) race_boomer$Percentage <- prop.table(table(anes_boomer$dem_raceeth_x)) race_boomer$Percentage <- round((race_boomer$Percentage * 100), digits = 0) #stargazer(race_genY, race_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Race Breakdown", "Boomer Race Breakdown"))
+race_genY$Percentage <- prop.table(table(anes_genY$dem_raceeth_x))
+
+race_genY$Percentage <- round((race_genY$Percentage * 100), digits = 0) 
+
+race_boomer$Percentage <- prop.table(table(anes_boomer$dem_raceeth_x)) 
+
+race_boomer$Percentage <- round((race_boomer$Percentage * 100), digits = 0) 
+
+#stargazer(race_genY, race_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Race Breakdown", "Boomer Race Breakdown"))
+
 stargazer(race_genY, race_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Race Breakdown", "Boomer Race Breakdown"))
 ```
 
@@ -142,11 +163,18 @@ We'll show descriptive statistics for one more demographic variable before movin
 From academic literature we believe employment status will have an especially profound impact on Millennial voters by contributing to a lack of sense of political efficacy. We continue with differences specifically between Millennials and Baby Boomers, showing the following tables.
 
 ```{r, echo=FALSE, results='asis'}
+
 levels(anes_genY$dem_empstatus_initial) <- c("Refused", "Don't know", "Inapplicable", "Working now", "Temporarily laid off", "Unemployed", "Retired", "Permanently disabled", "Homemaker", "Student") 
-emp_genY <- table(anes_genY$dem_empstatus_initial) %>% as.data.frame() colnames(emp_genY) <- c("Employment Status", "Number of People") emp_genY$Percentage <- prop.table(table(anes_genY$dem_empstatus_initial)) emp_genY$Percentage <- round((emp_genY$Percentage * 100), digits = 0)
+emp_genY <- table(anes_genY$dem_empstatus_initial) %>% as.data.frame() 
+colnames(emp_genY) <- c("Employment Status", "Number of People") 
+emp_genY$Percentage <- prop.table(table(anes_genY$dem_empstatus_initial)) 
+emp_genY$Percentage <- round((emp_genY$Percentage * 100), digits = 0)
 levels(anes_boomer$dem_empstatus_initial) <- c("Refused", "Don't know", "Inapplicable", "Working now", "Temporarily laid off", "Unemployed", "Retired", "Permanently disabled", "Homemaker", "Student") 
-emp_boomer <- table(anes_boomer$dem_empstatus_initial) %>% as.data.frame() colnames(emp_boomer) <- c("Employment Status", "Number of People") emp_boomer$Percentage <- prop.table(table(anes_boomer$dem_empstatus_initial)) emp_boomer$Percentage <- round((emp_boomer$Percentage * 100), digits = 0) #stargazer(emp_genY, emp_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown")) 
-stargazer(emp_genY, emp_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown"))
+emp_boomer <- table(anes_boomer$dem_empstatus_initial) %>% as.data.frame()
+colnames(emp_boomer) <- c("Employment Status", "Number of People") 
+emp_boomer$Percentage <- prop.table(table(anes_boomer$dem_empstatus_initial)) 
+emp_boomer$Percentage <- round((emp_boomer$Percentage * 100), digits = 0) #stargazer(emp_genY, emp_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown")) 
+stargazer(emp_genY, emp_boomer, summary = FALSE, rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown"))
 ```
 
 This one is quite surprising, but mostly because so many Boomers are coded as "inapplicable," which gives a false impression of unemployment. According to ANES, observations are coded "inapplicable" when "a question was not asked due to branching or skip patterns that made it inapplicable." Because there are other employment variables, we will substitute one for the final analysis, because the results of predictive statistics would ultimately give false impressions. 
@@ -154,6 +182,7 @@ This one is quite surprising, but mostly because so many Boomers are coded as "i
 The last variable for which we'll provide descriptive statistics is the strenth of party identification, starting with Millennials. The variable does not specify party, but rather tells how much a respondent identifies with his or her party.
 
 ```{r, echo=FALSE}
+
 pid_genY <- table(anes_genY$pid_strong) %>% as.data.frame() 
 colnames(pid_genY) <- c("Party ID strength", "Number of people") 
 ggplot(pid_genY, aes(x = pid_genY[,1], y = pid_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Party ID Strength") + labs(x="Strength of Party ID", y="Number of people")
@@ -163,7 +192,9 @@ ggplot(pid_genY, aes(x = pid_genY[,1], y = pid_genY[,2])) + geom_bar(stat = "ide
 For Baby Boomers, the data look like this:
 
 ```{r, echo=FALSE}
-pid_boomer <- table(anes_boomer$pid_strong) %>% as.data.frame() colnames(pid_boomer) <- c("Party ID strength", "Number of people") ggplot(pid_boomer, aes(x = pid_boomer[,1], y = pid_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Party ID Strength") + labs(x="Strength of Party ID", y="Number of people")
+pid_boomer <- table(anes_boomer$pid_strong) %>% as.data.frame() 
+colnames(pid_boomer) <- c("Party ID strength", "Number of people") 
+ggplot(pid_boomer, aes(x = pid_boomer[,1], y = pid_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Party ID Strength") + labs(x="Strength of Party ID", y="Number of people")
 ```
 
 Surprisingly, considering literature routinely touts the unaffiliated status of Millennials, it is the Baby Boomers in this sample who identify less strongly with party in the extreme end of the spectrum. 

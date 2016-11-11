@@ -28,10 +28,17 @@ anes <- anes[!(anes$dem_age_r_x <= -2 | anes$dem_age_r_x >= 88),]
 #deletes outliers
 
 #table(anes$dem_edugroup_x) #education
-levels(anes$dem_edugroup_x) <- c("Refused", "Don't know", "Data missing", "Below high school", "High school", "Some post-high", "Bachelor", "Graduate") #the above #applies new levels for improved readability later on
+levels(anes$dem_edugroup_x) <- c("Refused", "Don't know", "Data missing", 
+                                 "Below high school", "High school", 
+                                 "Some post-high", "Bachelor", "Graduate") 
+#the above #applies new levels for improved readability later on
 
 #table(anes$dem_raceeth_x) #race
-levels(anes$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") #the above applies new levels for improved readability later on
+levels(anes$dem_raceeth_x) <- c("Data missing", "White", "Black", 
+                                "Asian, Hawaiian, or Pacif Islr", 
+                                "Native American or Alaska Native", 
+                                "Hispanic", "Other") 
+#the above applies new levels for improved readability later on
 
 #table(anes$dem_empstatus_initial) #employment
 anes$employed <- anes$dem_emptype_work == "Working now" #creates dummy 
@@ -44,18 +51,23 @@ anes$female <- anes$gender_respondent_x == "2. Female" #creates dummy gender #va
 levels(anes$interest_voted2008) <- c("Refused", "Don't know", "Yes", "No")
 
 #table(anes$pid_strong) #strong party ID
-levels(anes$pid_strong) <- c("Refused", "Don't know", "Error", "Inapplicable", "Strong", "Not very strong") 
+levels(anes$pid_strong) <- c("Refused", "Don't know", "Error", "Inapplicable", 
+                             "Strong", "Not very strong") 
 anes$pid_dummy <- anes$pid_strong == "Strong" #creates dummy
 
 #table(anes$preswin_dutyst) #voting as civic duty
-levels(anes$pid_strong) <- c("Refused", "Don't know", "Inapplicable", "Very strongly", "Moderately strongly", "A little strongly") 
+levels(anes$pid_strong) <- c("Refused", "Don't know", "Inapplicable", 
+                             "Very strongly", "Moderately strongly", 
+                             "A little strongly") 
 anes$duty <- anes$preswin_dutyst == "Very strongly"
 
 #table(anes$postvote_prefprstr) #strong preference for candidate
 anes$strong_pref <- anes$postvote_prefprstr == "Strong"
 
 #combining needed variables in smaller data set 
-anes_small <- cbind(anes$dem_age_r_x, anes$dem_edugroup_x, anes$dem_raceeth_x, anes$employed, anes$female, anes$interest_voted2008, anes$pid_dummy, anes$preswin_dutyst, anes$strong_pref)
+anes_small <- cbind(anes$dem_age_r_x, anes$dem_edugroup_x, anes$dem_raceeth_x, 
+                    anes$employed, anes$female, anes$interest_voted2008, 
+                    anes$pid_dummy, anes$preswin_dutyst, anes$strong_pref)
 
 ```
 
@@ -89,8 +101,10 @@ anes_genY <- subset(anes, anes$dem_age_r_x > 17 & anes$dem_age_r_x < 33)
 #creates Millennial subset 
 anes_genX <- subset(anes, anes$dem_age_r_x > 32 & anes$dem_age_r_x < 48) 
 #creates Generation X subset 
-anes_boomer <- subset(anes, anes$dem_age_r_x > 47 & anes$dem_age_r_x < 67) #creates Baby Boomer subset 
-anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) #creates Silent Generation subset
+anes_boomer <- subset(anes, anes$dem_age_r_x > 47 & anes$dem_age_r_x < 67) 
+#creates Baby Boomer subset 
+anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) 
+#creates Silent Generation subset
 
 ```
 
@@ -203,7 +217,7 @@ The variables that will also be in the logistic regression model but haven't bee
 
 Gender is coded either 1 for male or 2 for female, but, as was shown earlier, we will be using it as a dummy variable in the model, with female coded as 1. 
 
-Whether a respondent voted in the 2008 presidential election is coded either as "refusedâ," "don't know," "yes", or "no," with the vast majority of respondents saying they did indeed vote. 
+Whether a respondent voted in the 2008 presidential election is coded either as "refused?," "don't know," "yes", or "no," with the vast majority of respondents saying they did indeed vote. 
 
 The strength of the belief that voting is a civic duty ranges from "a little strongly" to "very strongly," with a sizable majority of respondents answering "very strongly," but in actuality most respondents are coded inapplicable. Similarly, most respondents are coded inapplicable for their strength of preference toward their chosen candidate, but more than twice as many people answered as strong than not strong.
 

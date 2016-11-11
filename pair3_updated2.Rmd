@@ -73,13 +73,15 @@ anes_small <- cbind(anes$dem_age_r_x, anes$dem_edugroup_x, anes$dem_raceeth_x,
 
 Given that our model will ultimately isolate the effcts of our chosen turnout predictors on various age groups, it is useful to break our giant panel data set into smaller data frames by age bands. This will entail having one age band exclusively for Millennials, who, at the time of the 2012 election, were 18-32 years of age, based on the defnition used by the Pew Research Center and other organizations. The next age band will be Generation X, people born between 1965-1979, which places them between the ages of 33 and 47. Next comes the Baby Boomers, who were born between 1946 and 1964 and ran from ages 48 to 66 at the time of the 2012 election.The Silent Generation, born between 1925 and 1945, accounts for the age band of 67 to 87. But first, let's see what the age variable actually looks like.
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, message=FALSE, results='asis'}
 
 library(dplyr)
 library(stargazer)
 age <- anes$dem_age_r_x %>% as.data.frame()
 #stargazer(age, type = "text", summary = TRUE) for seeing #what the table looks #like, because without specifying text it just looks like the code for output as #it will eventually appear in a knitted document stargazer(age, summary = TRUE)
-stargazer(age, summary = TRUE)
+stargazer::stargazer(age,
+    title = 'Frequency of Age',
+    digits = 2, type = 'latex', header = FALSE)
 
 ```
 
@@ -90,7 +92,7 @@ Then we take a look at the frequency of observations by age.
 age_df <- table(anes$dem_age_r_x) %>% as.data.frame() #creates a frequency table #of the key age variable that's in the readalbe format of a data frame so we can #get a sense of what the data looks like. 
 colnames(age_df) <- c("Age", "Frequency") 
 #stargazer(age_df, summary = FALSE, type = "text", rownames = FALSE) for seeing #what the table looks like, because without specifying text it just looks like the #code for output as it will eventually appear in a knitted document
-stargazer(age_df, summary = FALSE, rownames = FALSE)
+stargazer(age_df, header = FALSE, summary = FALSE, rownames = FALSE)
 
 ```
 
@@ -115,7 +117,7 @@ Now that we have the ability to separate our data by age, let's look at some key
 library(ggplot2) 
 ed_genY <- table(anes_genY$dem_edugroup_x) %>% as.data.frame() 
 colnames(ed_genY) <- c("Education", "Number of people") 
-ggplot(ed_genY, aes(x = ed_genY[,1], y = ed_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Education") + labs(x="Education",y="Number of people")
+ggplot(ed_genY, aes(x = ed_genY[,1], y = ed_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Education") + labs(x="Education",y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
 
 ```
 
@@ -127,11 +129,14 @@ Let's see how the data look for Baby Boomers.
 
 ed_boomer <- table(anes_boomer$dem_edugroup_x) %>% as.data.frame() 
 colnames(ed_boomer) <- c("Education", "Number of people") 
-ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Education") + labs(x="Education",y="Number of people")
+ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Education") + labs(x="Education",y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
 
 ```
 
 The data actually have a somewhat similar shape and distribution, just slightly different proportions. For one, a lot more Baby Boomers in this sample have graduate-level educations, which may reflect the relative youth of the Millennials in our sample. Now we'llll take a quick look at race by generation, and again we'll begin with Millennials.
+
+##Race by Generation 
+
 
 ```{r, echo=FALSE}
 
@@ -141,6 +146,8 @@ colnames(race_genY) <- c("Race", "Number of people")
 ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") +  ggtitle("Millenial Race Breakdown") + labs(x="Race",y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
 
 ```
+
+
 
 Now, we'll take a look at the Baby Boomers by race.
 
@@ -152,6 +159,8 @@ colnames(race_boomer) <- c("Race", "Number of People")
 ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") +  ggtitle("Boomer Race Breakdown") + labs(x="Race",y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
 
 ```
+
+
 
 The difference visually is stark. The relatively lower proportions of black and hispanic people among Boomers is especially striking. Comparing the two groups with exact percentages, we have something like this:
 
@@ -167,8 +176,9 @@ race_boomer$Percentage <- round((race_boomer$Percentage * 100), digits = 0)
 
 #stargazer(race_genY, race_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Race Breakdown", "Boomer Race Breakdown"))
 
-stargazer(race_genY, race_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Race Breakdown", "Boomer Race Breakdown"))
+stargazer(race_genY, race_boomer, header = FALSE, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Race Breakdown", "Boomer Race Breakdown"))
 ```
+
 
 These tables make the racial differences even clearer, showing that 47% of Millennials are non-white in this sample, compared with 33% of Baby Boomers, which generally refects the differences within the true population. 
 
@@ -188,7 +198,7 @@ emp_boomer <- table(anes_boomer$dem_empstatus_initial) %>% as.data.frame()
 colnames(emp_boomer) <- c("Employment Status", "Number of People") 
 emp_boomer$Percentage <- prop.table(table(anes_boomer$dem_empstatus_initial)) 
 emp_boomer$Percentage <- round((emp_boomer$Percentage * 100), digits = 0) #stargazer(emp_genY, emp_boomer, summary = FALSE, type = "text", rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown")) 
-stargazer(emp_genY, emp_boomer, summary = FALSE, rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown"))
+stargazer(emp_genY, emp_boomer, header = FALSE, summary = FALSE, rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown"))
 ```
 
 This one is quite surprising, but mostly because so many Boomers are coded as "inapplicable," which gives a false impression of unemployment. According to ANES, observations are coded "inapplicable" when "a question was not asked due to branching or skip patterns that made it inapplicable." Because there are other employment variables, we will substitute one for the final analysis, because the results of predictive statistics would ultimately give false impressions. 

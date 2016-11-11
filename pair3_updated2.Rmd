@@ -6,7 +6,7 @@ output: pdf_document
 
 ---
 
-To reiterate briely, we posit that predictors of individual voter turnout that commonly appear in academic literature will have different impacts on Millennial voters than older generations owing to signicant differences in attitude, composition, and other areas. Some -- such as education and party identication -- will have less of an impact as measured in a logit regression, while others -- such as gender, race, candidate attachment, employment status -- will have greater predictive power. To assess these differences, the same set of variables will be applied to different generational age bands using a logistical regression model.
+To reiterate briely, we posit that predictors of individual voter turnout that commonly appear in academic literature will have different impacts on Millennial voters than older generations owing to signicant differences in attitude, composition, and other areas. We predict that some -- such as education and party identication -- will have less of an impact as measured in a logit regression, while others -- such as gender, race, candidate attachment, employment status -- will have greater predictive power. To assess these differences, the same set of variables will be applied to different generational age bands using a logistical regression model.
 
 Our data source is the 2012 Times Series Study from American National Election Studies, a joint Stanford University and University of Michigan collaboration that is widely cited in academic literature. The study surveyed the same respondents both before and after the 2012 U.S. presidential election. There were approximately 6,000 respondents who were contacted via the internet and face to face. The database is comprehensive inscope, covering myriad demographic variables along with attitudes, opinions, and dispositions. While there is a 2013 follow-up with the same panel, the variables are not of interest and merging would require losing more than 3,000 respondents, making the validity of our finndings less robust. 
 
@@ -72,7 +72,7 @@ anes_small <- cbind(anes$dem_age_r_x, anes$dem_edugroup_x, anes$dem_raceeth_x,
 
 ```
 
-Given that our model will ultimately isolate the effcts of our chosen turnout predictors on various age groups, it is useful to break our giant panel data set into smaller data frames by age bands. This will entail having one age band exclusively for Millennials, who, at the time of the 2012 election, were 18-32 years of age, based on the defnition used by the Pew Research Center and other organizations. The next age band will be Generation X, people born between 1965-1979, which places them between the ages of 33 and 47. Next comes the Baby Boomers, who were born between 1946 and 1964 and ran from ages 48 to 66 at the time of the 2012 election.The Silent Generation, born between 1925 and 1945, accounts for the age band of 67 to 87. But first, let's see what the age variable actually looks like.
+Given that our model will ultimately isolate the effcts of our chosen turnout predictors on various age groups, it is useful to break our giant panel data set into smaller data frames by age bands. This will entail having one age band exclusively for Millennials, who, at the time of the 2012 election, were 18-32 years of age, based on the definition used by the Pew Research Center and other organizations. The next age band will be Generation X, people born between 1965-1979, which places them between the ages of 33 and 47. Next comes the Baby Boomers, who were born between 1946 and 1964 and ran from ages 48 to 66 at the time of the 2012 election.The Silent Generation, born between 1925 and 1945, accounts for the age band of 67 to 87. But first, let's see what the age variable actually looks like.
 
 ```{r, echo=FALSE, message=FALSE, results='asis'}
 
@@ -128,9 +128,9 @@ ggplot(ed_genY, aes(x = ed_genY[,1], y = ed_genY[,2])) + geom_bar(stat = "identi
 
 ```
 
-The largest share of Millennial respondents, nearly 500, list some post-high-school education.The secondhighest category is high school education alone.
+The largest share of Millennial respondents, nearly 500, list some post-high-school education.The second highest category is high school education alone.
 
-Let's see how the data look for Baby Boomers.
+Let's see how the data looks for Baby Boomers.
 
 ```{r, echo=FALSE}
 
@@ -142,7 +142,7 @@ ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "
 
 
 
-The data actually have a somewhat similar shape and distribution, just slightly different proportions. For one, a lot more Baby Boomers in this sample have graduate-level educations, which may reflect the relative youth of the Millennials in our sample. Now we'llll take a quick look at race by generation, and again we'll begin with Millennials.
+The data actually have a somewhat similar shape and distribution, just slightly different proportions. For one, a lot more Baby Boomers in this sample have graduate-level educations, which may reflect the relative youth of the Millennials in our sample. Now we'll take a quick look at race by generation, and again we'll begin with Millennials.
 
 
 
@@ -177,7 +177,7 @@ ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(st
 
 
 
-The difference visually is stark. The relatively lower proportions of black and hispanic people among Boomers is especially striking. Comparing the two groups with exact percentages, we have something like this:
+The difference is visually stark. The relatively lower proportions of black and hispanic people among Boomers is especially striking. Comparing the two groups with exact percentages, we have something like this:
 
 ```{r, echo=FALSE, results='asis'}
 
@@ -197,13 +197,13 @@ stargazer(race_genY, race_boomer, header = FALSE, summary = FALSE, type = "text"
 
 These tables make the racial differences even clearer, showing that 47% of Millennials are non-white in this sample, compared with 33% of Baby Boomers, which generally refects the differences within the true population. 
 
-We'll show descriptive statistics for one more demographic variable before moving on to some other variables of interest in the sake of space and word count. 
+We'll show descriptive statistics for one more demographic variable before moving on to some other variables of interest for the sake of space and word count. 
 
 
 #Employment Status by Generation 
 
 
-From academic literature we believe employment status will have an especially profound impact on Millennial voters by contributing to a lack of sense of political efficacy. We continue with differences specifically between Millennials and Baby Boomers, showing the following tables.
+From the academic literature, we believe employment status will have an especially profound impact on Millennial voters by contributing to a lack of sense of political efficacy. We continue with differences specifically between Millennials and Baby Boomers, showing the following tables.
 
 ```{r, echo=FALSE, results='asis'}
 

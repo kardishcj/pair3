@@ -1,5 +1,5 @@
 ---
-title: "Preparing and Exploring our Election Panel Data"
+title: "**Preparing and Exploring our Election Panel Data**"
 author: "Chris Kardish and Marie Agosta"
 date: "November 8, 2016"
 output: pdf_document
@@ -112,6 +112,12 @@ anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88)
 
 Now that we have the ability to separate our data by age, let's look at some key descriptive differences between the age groups, starting with education for Millennials.
 
+
+
+
+#Education 
+
+
 ```{r, echo=FALSE}
 
 library(ggplot2) 
@@ -133,9 +139,13 @@ ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "
 
 ```
 
+
+
 The data actually have a somewhat similar shape and distribution, just slightly different proportions. For one, a lot more Baby Boomers in this sample have graduate-level educations, which may reflect the relative youth of the Millennials in our sample. Now we'llll take a quick look at race by generation, and again we'll begin with Millennials.
 
-##Race by Generation 
+
+
+#Race by Generation 
 
 
 ```{r, echo=FALSE}
@@ -149,6 +159,8 @@ ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "
 
 
 
+
+
 Now, we'll take a look at the Baby Boomers by race.
 
 ```{r, echo=FALSE}
@@ -157,8 +169,10 @@ levels(anes_boomer$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian,
 race_boomer <- table(anes_boomer$dem_raceeth_x) %>% as.data.frame()
 colnames(race_boomer) <- c("Race", "Number of People") 
 ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") +  ggtitle("Boomer Race Breakdown") + labs(x="Race",y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
-
 ```
+
+
+
 
 
 
@@ -184,6 +198,10 @@ These tables make the racial differences even clearer, showing that 47% of Mille
 
 We'll show descriptive statistics for one more demographic variable before moving on to some other variables of interest in the sake of space and word count. 
 
+
+#Employment Status by Generation 
+
+
 From academic literature we believe employment status will have an especially profound impact on Millennial voters by contributing to a lack of sense of political efficacy. We continue with differences specifically between Millennials and Baby Boomers, showing the following tables.
 
 ```{r, echo=FALSE, results='asis'}
@@ -201,25 +219,34 @@ emp_boomer$Percentage <- round((emp_boomer$Percentage * 100), digits = 0) #starg
 stargazer(emp_genY, emp_boomer, header = FALSE, summary = FALSE, rownames = FALSE, title = c("Millennial Employment Breakdown", "Boomer Employment Breakdown"))
 ```
 
+
+
 This one is quite surprising, but mostly because so many Boomers are coded as "inapplicable," which gives a false impression of unemployment. According to ANES, observations are coded "inapplicable" when "a question was not asked due to branching or skip patterns that made it inapplicable." Because there are other employment variables, we will substitute one for the final analysis, because the results of predictive statistics would ultimately give false impressions. 
 
 The last variable for which we'll provide descriptive statistics is the strenth of party identification, starting with Millennials. The variable does not specify party, but rather tells how much a respondent identifies with his or her party.
+
+
+# Party Identification
+
 
 ```{r, echo=FALSE}
 
 pid_genY <- table(anes_genY$pid_strong) %>% as.data.frame() 
 colnames(pid_genY) <- c("Party ID strength", "Number of people") 
-ggplot(pid_genY, aes(x = pid_genY[,1], y = pid_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Party ID Strength") + labs(x="Strength of Party ID", y="Number of people")
+ggplot(pid_genY, aes(x = pid_genY[,1], y = pid_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Party ID Strength") + labs(x="Strength of Party ID", y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1))
 ```
 
 
-For Baby Boomers, the data look like this:
+
+For Baby Boomers, the data looks like this:
 
 ```{r, echo=FALSE}
 pid_boomer <- table(anes_boomer$pid_strong) %>% as.data.frame() 
 colnames(pid_boomer) <- c("Party ID strength", "Number of people") 
-ggplot(pid_boomer, aes(x = pid_boomer[,1], y = pid_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Party ID Strength") + labs(x="Strength of Party ID", y="Number of people")
+ggplot(pid_boomer, aes(x = pid_boomer[,1], y = pid_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Party ID Strength") + labs(x="Strength of Party ID", y="Number of people") + theme(axis.text.x = element_text(angle = 70, hjust = 1)) 
 ```
+
+<br>
 
 Surprisingly, considering literature routinely touts the unaffiliated status of Millennials, it is the Baby Boomers in this sample who identify less strongly with party in the extreme end of the spectrum. 
 

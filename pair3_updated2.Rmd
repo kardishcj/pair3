@@ -86,17 +86,6 @@ stargazer::stargazer(age,
 
 ```
 
-Then we take a look at the frequency of observations by age.
-
-```{r, echo=FALSE, message=FALSE, results='asis'}
-
-age_df <- table(anes$dem_age_r_x) %>% as.data.frame() #creates a frequency table #of the key age variable that's in the readalbe format of a data frame so we can #get a sense of what the data looks like. 
-colnames(age_df) <- c("Age", "Frequency") 
-#stargazer(age_df, summary = FALSE, type = "text", rownames = FALSE) for seeing #what the table looks like, because without specifying text it just looks like the #code for output as it will eventually appear in a knitted document
-stargazer(age_df, header = FALSE, summary = FALSE, rownames = FALSE)
-
-```
-
 We have all observations accounted for, with a mean age of respondent of 48, a fairly sizable standard deviation. We did have some outliers, one of which makes zero sense and has to be because of reporting error. 60 observations are coded with an age of -2. But those were dropped during the cleaning performed earlier. Additionally, because there are so few observations in the data set who are older than 87, the cuttoff age for the Silent Generation, we dropped those rows as well, because obtaining real results for this age group with so few observations in a logit model would be impossible. We do this by creating four different age bands representing the four different generations above, which will exclude values younger than 18 and older than 87, when we eventually run logit models.
 
 ```{r}

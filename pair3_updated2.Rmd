@@ -3,6 +3,7 @@ title: "**Preparing and Exploring our Election Panel Data**"
 author: "Chris Kardish and Marie Agosta"
 date: "November 8, 2016"
 output: pdf_document
+
 ---
 
 To reiterate briely, we posit that predictors of individual voter turnout that commonly appear in academic literature will have different impacts on Millennial voters than older generations owing to signicant differences in attitude, composition, and other areas. Some -- such as education and party identication -- will have less of an impact as measured in a logit regression, while others -- such as gender, race, candidate attachment, employment status -- will have greater predictive power. To assess these differences, the same set of variables will be applied to different generational age bands using a logistical regression model.
@@ -87,12 +88,12 @@ stargazer::stargazer(age,
 
 Then we take a look at the frequency of observations by age.
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, message=FALSE, results='asis'}
 
 age_df <- table(anes$dem_age_r_x) %>% as.data.frame() #creates a frequency table #of the key age variable that's in the readalbe format of a data frame so we can #get a sense of what the data looks like. 
 colnames(age_df) <- c("Age", "Frequency") 
 #stargazer(age_df, summary = FALSE, type = "text", rownames = FALSE) for seeing #what the table looks like, because without specifying text it just looks like the #code for output as it will eventually appear in a knitted document
-stargazer(age_df, header = FALSE, tidy = TRUE, summary = FALSE, rownames = FALSE)
+stargazer(age_df, header = FALSE, summary = FALSE, rownames = FALSE)
 
 ```
 

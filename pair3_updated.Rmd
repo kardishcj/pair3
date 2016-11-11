@@ -1,0 +1,199 @@
+---
+title: "Preparing and Exploring our Election Panel Data"
+author: "Chris Kardish and Marie Agosta"
+date: "November 8, 2016"
+output: pdf_document
+---
+
+To reiterate briefly, we posit that predictors of individual voter turnout that commonly appear in academic literature will have different impacts on Millennial voters than older generations owing to significant differences in attitude, composition, and other areas. Some -- such as education, income, and party identification -- will have less of an impact as measured in a logit regression, while others -- such as gender, race, candidate attachment, employment status -- will have greater predictive power. To assess these differences, the same set of variables will be applied to different generational age bands using a logistical regression model.
+
+Our data source is the 2012 Times Series Study from American National Election Studies, a joint Stanford University and University of Michigan collaboration that is widely cited in academic literature. The study surveyed the same respondents both before and after the 2012 U.S. presidential election. There were approximately 6,000 respondents who were contacted via the internet and face to face. The database is comprehensive in scope, covering myriad demographic variables along with attitudes, opinions, and dispositions. While there is a 2013 follow-up with the same panel, the variables are not of interest and merging would require losing more than 3,000 respondents, making the validity of our findings less robust. 
+
+Variables used include highest level of education, marital status, gender, race, employment status, income, past voting decisions, party identification, civic duty, membership in traditional institutions, and candidate attachment. 
+
+Because ANES requires login information and its ZIP folders contain many files, it is not possible to access the data using only a URL and tempfile function. 
+dem_marital
+
+In terms of cleaning and organizing, given that our model will ultimately isolate the effects of our chosen turnout predictors on various age groups, we first need to break our giant panel data set into smaller data frames by age bands. This will entail having one age band exclusively for Millennials, who, at the time of the 2012 election, were 18-32 years of age, based on the definition used by the Pew Research Center and other organizations. The next age band will be Generation X, people born between 1965-1979, which places them between the ages of 33 and 47. Next comes the Baby Boomers, who were born between 1946 and 1964 and ran from ages 48 to 66 at the time of the 2012 election.The Silent Generation, born between 1925 and 1945, accounts for the age band of 67 to 87. 
+
+But first, let's see what the age variable actually looks like.
+
+```{r}
+#rm(list = ls()) this command clears your environment
+#setwd('C:/Users/Chris/Documents/GitHub/pair3')
+library(foreign)
+library(dplyr)
+library(stargazer)
+
+anes <- read.dta("anes_timeseries_2012_Stata12.dta")
+age <- anes$dem_age_r_x %>% as.data.frame()
+#stargazer(age, type = "text", summary = TRUE) for seeing #what the table looks #like, because without specifying text it just looks like the code for output as #it will eventually appear in a knitted document
+stargazer(age, summary = TRUE)
+```
+
+Then we take a look at the frequency of observations by age.
+
+```{r}
+age_df <- table(anes$dem_age_r_x) %>% as.data.frame() #creates a frequency table #of the key age variable that's in the readalbe format of a data frame so we can #get a sense of what the data looks like.
+colnames(age_df) <- c("Age", "Frequency")
+#stargazer(age_df, summary = FALSE, type = "text", rownames = FALSE) for seeing #what the table looks like, because without specifying text it just looks like the #code for output as it will eventually appear in a knitted document
+stargazer(age_df, summary = FALSE, rownames = FALSE)
+
+```
+
+We have all observations accounted for, with a mean age of respondent of 48, a fairly sizable standard deviation, and some outliers, one of which makes zero sense and has to be because of reporting error. 60 observations are coded with an age of -2. Additionally, because there are so few observations in the data set who are older than 87, the cutoff age for the Silent Generation, we will drop them as well, because obtaining real results for this age group with so few observations in a Logit model would be impossible. We do this by creating four different age bands representing the four different generations above, which will exclude values younger than 18 and older than 87, when we eventually run logit models. 
+
+```{r}
+anes_genY <- subset(anes, anes$dem_age_r_x > 17 & anes$dem_age_r_x < 33) #creates Millennial subset
+anes_genX <-  subset(anes, anes$dem_age_r_x > 32 & anes$dem_age_r_x < 48) #creates Generation X subset
+anes_boomer <- subset(anes, anes$dem_age_r_x > 47 & anes$dem_age_r_x < 67) #creates Baby Boomer subset
+anes_silent <- subset(anes, anes$dem_age_r_x > 66 & anes$dem_age_r_x < 88) #creates Silent Generation subset
+```
+
+Now that we have the ability to separate our data by age, let's look at some key descriptive differences between the age groups, starting with education for Millennials. 
+
+```{r}
+
+library(ggplot2)
+levels(anes$dem_edugroup_x)
+#changing the wording because it looks awful and will look even worst on 
+#a table; doing this by changing the factor levels 
+levels(anes_genY$dem_edugroup_x) <- c("Refused", "Don't know", "Data missing", "Below high school", "High school", "Some post-high", "Bachelor", "Graduate") 
+ed_genY <- table(anes_genY$dem_edugroup_x)  %>% as.data.frame()
+colnames(ed_genY) <- c("Education", "Number of people")
+ggplot(ed_genY, aes(x = ed_genY[,1], y = ed_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Gen Y Education") + labs(x="Education",y="Number of people")
+
+```
+
+[will describe what I see]
+
+Compare that with the Baby Boomers
+
+```{r}
+
+levels(anes_boomer$dem_edugroup_x) <- c("Refused", "Don't know", "Data missing", "Below high school", "High school", "Some post-high", "Bachelor", "Graduate") 
+ed_boomer <- table(anes_boomer$dem_edugroup_x)  %>% as.data.frame()
+colnames(ed_boomer) <- c("Education", "Number of people")
+ggplot(ed_boomer, aes(x = ed_boomer[,1], y = ed_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Education") + labs(x="Education",y="Number of people")
+
+```
+
+[Will then write something describing the plot here]
+
+Now we'll take a quick look at race by generation, again we'll begin with Millennials. 
+
+```{r}
+#Looking at the breakdown of race for GenerationY (Millennials)
+
+library(ggplot2)
+levels(anes$dem_raceeth_x)
+#changing the wording because it looks awful and will look even worst on 
+#a table; doing this by changing the factor levels 
+levels(anes_genY$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
+race_genY <- table(anes_genY$dem_raceeth_x)  %>% as.data.frame()
+colnames(race_genY) <- c("Race", "Number of people")
+ggplot(race_genY, aes(x = race_genY[,1], y = race_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Millenial Race Breakdown") + labs(x="Race",y="Number of people")
+
+```
+
+Now, we'll take a look at the babyboomers by race. 
+
+```{r} 
+#Looking at the breakdown of race for Babyboomers
+
+levels(anes$dem_raceeth_x)
+
+#sticking with the original coding, other does count as an additional race
+levels(anes_boomer$dem_raceeth_x) <- c("Data missing", "White", "Black", "Asian, Hawaiian, or Pacif Islr", "Native American or Alaska Native", "Hispanic", "Other") 
+race_boomer <- table(anes_boomer$dem_raceeth_x)  %>% as.data.frame()
+colnames(race_boomer) <- c("Race", "Number of people")
+ggplot(race_boomer, aes(x = race_boomer[,1], y = race_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Race Breakdown") + labs(x="Race",y="Number of people")
+
+```
+
+When comparing the Millennials to the babyboomers, we see that while whites are still the majority, there is much stronger minority representation in the Millennial generation. 
+
+```{r} 
+#I TRIED TO CREATE A PRETTY STARGAZER TABLE HERE BUT I CAN'T MAKE IT WORK. I'D LIKE TO 
+#GIVE ONE CLEAR TABLE COMPARING FREQUENCY OF MINORITY RACES PER GENERATION 
+
+Race_df <- anes$dem_raceeth_x %>% as.data.frame()
+stargazer(Race_df)
+
+stargazer(Race_df, summary = FALSE, rownames = FALSE)
+
+a percentage breakdown would be ideal. 
+
+
+Now we'll look at employment status by generation, first the millenials: 
+
+```
+
+
+```{r} 
+
+levels(anes$dem_empstatus_1digitfin_x)
+
+#sticking with the original coding, other does count as an additional race
+levels(anes_genY$dem_empstatus_1digitfin_x) <- c("Refused", "Don't Know", "Working", "Laid off", "Unemployed", "Retired", "Disabled", "Homemaker", "Student") 
+
+#I'd like to eliminate all of them except working, laid off, unemployed, homemaker, student 
+
+employ_genY <- table(anes_genY$dem_empstatus_1digitfin_x)  %>% as.data.frame()
+colnames(employ_genY) <- c("Employment", "Number of people")
+ggplot(employ_genY, aes(x = employ_genY[,1], y = employ_genY[,2])) + geom_bar(stat = "identity") + ggtitle("Millennials Employment Status") + labs(x="Employment Status",y="Number of people")
+
+```
+
+Next, the babyboomers:
+
+```{r} 
+
+levels(anes$dem_empstatus_1digitfin_x)
+
+#sticking with the original coding, other does count as an additional race
+levels(anes_boomer$dem_empstatus_1digitfin_x) <- c("Refused", "Don't Know", "Working", "Laid off", "Unemployed", "Retired", "Disabled", "Homemaker", "Student") 
+
+#I'd like to eliminate all of them except working, laid off, unemployed, homemaker, student 
+
+employ_boomer <- table(anes_boomer$dem_empstatus_1digitfin_x)  %>% as.data.frame()
+colnames(employ_boomer) <- c("Employment", "Number of people")
+ggplot(employ_boomer, aes(x = employ_boomer[,1], y = employ_boomer[,2])) + geom_bar(stat = "identity") + ggtitle("Boomer Employment Status") + labs(x="Employment Status",y="Number of people")
+
+```
+
+
+
+
+
+
+
+Gender for Millenials
+
+```{r} 
+
+levels(anes$gender_respondent_x)
+
+levels(anes_genY$gender_respondent_x) <- c("Male", "Female") 
+
+Gender_genY <- table(anes_genY$gender_respondent_x)  %>% as.data.frame()
+colnames(Gender_genY) <- c("Gender", "Number of people")
+
+```
+
+Gender for babyboomers
+
+```{r} 
+
+levels(anes$gender_respondent_x)
+
+levels(anes_boomer$gender_respondent_x) <- c("Male", "Female") 
+
+Gender_boomer <- table(anes_boomer$gender_respondent_x)  %>% as.data.frame()
+colnames(Gender_boomer) <- c("Gender", "Number of people")
+
+```
+
+
+
+
